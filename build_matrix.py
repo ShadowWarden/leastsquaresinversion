@@ -11,16 +11,16 @@ import numpy as np
 import math
 
 # Grid dimensions
-N = 3
+N = 60
 # Number of rays per angle
 m = 10
 # Number of points per ray
 n = 20
 
 # Generate Theta array
-theta_i = np.pi/2.
+theta_i = 0.
 theta_f = np.pi/2.
-Ntheta = 1
+Ntheta = 100
 th = np.linspace(theta_i,theta_f,Ntheta)
 
 # Define shape of A matrix
@@ -43,6 +43,6 @@ for t in range(Ntheta):
 				Y = int((y[i][j]+1)/2.*(N))
 				print(X,Y,":",x[j],y[i,j],":",j,":",m)
 				if(th[t] > np.pi/4.):
-					A[t*Ntheta+i,N*X+Y] += 1
+					A[t*m+i,N*X+Y] += 1
 				else:
-					A[t*Ntheta+i,N*X+Y] += 1
+					A[t*m+i,N*X+Y] += 1
