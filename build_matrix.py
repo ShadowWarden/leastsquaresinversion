@@ -26,7 +26,7 @@ N = 60
 # Number of rays per angle
 m = 10
 # Number of points per ray
-n = 120
+n = N**3
 
 # Generate Theta array
 theta_i = 0.
@@ -47,25 +47,27 @@ for t in range(Ntheta):
 	C = np.linspace(-1,1,m)
 	y = np.zeros([m,n])
 	for i in range(m):
-		# Define straight line corresponding to the ray
-		# Because y is a 2D array and x is 1D, to accomodate the floating
-		# constant, I'm not changing names when switching from equation
-		# in x for y (y=tan(theta)*x+C) and (x=cot(theta)*y+C). The reason
-		# why this works is that when 0<th<pi/4, every point in x is 
-		# sampled while for pi/4<th<pi/2, every point in y is sampled,
-		# thus it is sufficient to define one spanning vector and define
-		# the other in terms of it
-		if(th[t] > np.pi/4.):
-			y[i] = x*cotth[t]+C[i]
-		else:
-			y[i] = x*tanth[t]+C[i]
-
-		for j in range(1,n-1):
-			X = int((x[j]+1)/2.*(N))
-			Y = int((y[i][j]+1)/2.*(N))
-			print(X,Y,":",x[j],y[i,j],":",j,":",m)
-			# Ignore points exactly on the boundary of the grid
-			if(abs(x[j]) >= 1  or abs(y[i][j]) >= 1):
-				continue
-			# ... Otherwise, tally up that point in A
-			A[t*m+i,N*X+Y] += 1
+            # Define straight line corresponding to the ray
+            # Because y is a 2D array and x is 1D, to accomodate the floating
+            # constant, I'm not changing names when switching from equation
+            # in x for y (y=tan(theta)*x+C) and (x=cot(theta)*y+C). The reason
+            # why this works is that when 0<th<pi/4, every point in x is 
+            # sampled while for pi/4<th<pi/2, every point in y is sampled,
+            # thus it is sufficient to define one spanning vector and define
+            # the other in terms of it
+            if(th[t] > np.pi/4.):
+                y[i] = x*cotth[t]+C[i]
+            else:
+                y[i] = x*tanth[t]+C[i]
+                
+            X = (x+1)/2.*(N)
+            Y = (y[i]+1)/2.*(N)
+            # Ignore points exactly on the boundary of the grid
+            ii = np.where(abs(X) >= 60)
+            jj = np.where(abs(Y) >= 60)
+            X[ii] = int(0)
+            Y[jj] = int(0)
+            X = X.astype(int)
+            Y = Y.astype(int)
+            # ... Otherwise, tally up that point in A
+            A[t*m+i,N*X[:]+Y[:]] += 1
