@@ -22,7 +22,7 @@ import numpy as np
 import math
 
 # Grid dimensions
-N = 60
+N = 3
 # Number of rays per angle
 m = 10
 # Number of points per ray
@@ -63,10 +63,10 @@ for t in range(Ntheta):
             X = (x+1)/2.*(N)
             Y = (y[i]+1)/2.*(N)
             # Ignore points exactly on the boundary of the grid
-            ii = np.where(abs(X) >= 60)
-            jj = np.where(abs(Y) >= 60)
-            X[ii] = int(0)
-            Y[jj] = int(0)
+            ii = np.where(abs(X) >= N)
+            jj = np.where(abs(Y) >= N)
+            X[ii] = N-1
+            Y[jj] = N-1
             X = X.astype(int)
             Y = Y.astype(int)
             # ... Otherwise, tally up that point in A
